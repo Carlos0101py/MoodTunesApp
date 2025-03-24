@@ -1,0 +1,44 @@
+# Visual Studio e Rider
+.vs/
+.idea/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Build e Publish
+bin/
+obj/
+out/
+publish/
+
+# Configurações do sistema
+appsettings.Development.json
+appsettings.Local.json
+appsettings.Production.json
+appsettings.Staging.json
+secrets.json
+
+# Logs e Dumps
+*.log
+*.tlog
+*.cache
+*.pdb
+*.swp
+*.pid
+hs_err_pid*
+
+# Pacotes
+*.nupkg
+*.snupkg
+packages/
+.nuget/
+
+# Cache do Visual Studio
+.vscode/
+*.code-workspace
+
+# Arquivos do sistema
+Thumbs.db
+ehthumbs.db
+Desktop.ini

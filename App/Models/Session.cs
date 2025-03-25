@@ -6,7 +6,6 @@ namespace MoodTunesApp.App.Models
     {
         [Required]
         public Guid Token {get; set;}
-        
         [Required]
         public Guid UserId { get; set; }
 

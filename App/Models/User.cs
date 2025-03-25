@@ -5,20 +5,14 @@ namespace MoodTunesApp.App.Models
 {
     public class User : ModelBase
     {
-        [Key]
-        public Guid UserId { get; set; }
-
         [Required]
         public string UserName { get; set; }
-
         [Required]
         public string Email { get; set; }
-
         [Required]
         public string ImageProfileURL { get; set; }
-
         private string _Password;
-
+        
         [Required]
         public string Password
         {
@@ -29,11 +23,15 @@ namespace MoodTunesApp.App.Models
             }
         }
 
+        [Required]
+        public Guid LibraryId {get; set;}
+        [Required]
         public Guid MoodMaterId {get; set;}
 
         /*Propriedade de navegação, ajuda na hora de recuperar
         os dados sem a necessidade de joins ( Pesquisar depois )
         */
+        public Library Library {get; set;}
         public Session Session {get; set;}
         public MoodMater MoodMater {get; set;}
 

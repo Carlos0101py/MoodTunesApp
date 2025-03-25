@@ -4,8 +4,9 @@ namespace MoodTunesApp.App.Models
     public class MoodMater : ModelBase
     {
         public ICollection<MoodType> MoodTypes {get;}
-
+        
         public User User {get; set;}
+        
         
         public MoodMater() : base(Guid.NewGuid(), DateTime.Now, DateTime.Now)
         {

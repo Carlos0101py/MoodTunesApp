@@ -7,7 +7,15 @@ namespace MoodTunesApp.App.Models
     {
         [Required]
         public string ImageURL {get; set;}
-        
+        [Required]
+        public string Name {get; set;}
+
+        public Guid LibraryId {get; set;}
+
+        public ICollection<Music> Musics {get; set;}
+        public ICollection<PlaylistMusic> PlaylistMusics {get; set;}
+        public Library Library {get; set;}
+
 
         public Playlist() : base(Guid.NewGuid(), DateTime.Now, DateTime.Now)
         {

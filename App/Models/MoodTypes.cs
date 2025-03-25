@@ -7,9 +7,12 @@ namespace MoodTunesApp.App.Models
     {
         [Required]
         public string Name {get; set;}
-
+        
         public Guid MoodMaterId { get; set; }
+        public Guid MusicId {get; set;}
+        
         public MoodMater MoodMater {get; set;}
+        public Music Music {get; set;}
 
         
         public MoodType() : base(Guid.NewGuid(), DateTime.Now, DateTime.Now)

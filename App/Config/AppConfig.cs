@@ -8,7 +8,7 @@ namespace MoodTunesApp.App.Config
         public static void StartDependencies(WebApplicationBuilder builder)
         {
 
-            string connectionString = "Server=localhost;Database=DataBaseAgenda;User Id=root;Password=senharoot;";
+            string connectionString = "Server=localhost;Database=MoodTunesdb;User Id=root;Password=senharoot;";
 
             try
             {

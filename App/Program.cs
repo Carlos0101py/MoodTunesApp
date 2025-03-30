@@ -10,6 +10,8 @@ try
 
     AppConfig.StartDependencies(builder);
 
+    builder.Services.AddControllers();
+
     var app = builder.Build();
 
     // Configure the HTTP request pipeline.
@@ -19,6 +21,8 @@ try
     }
 
     app.UseHttpsRedirection();
+    // app.UseAuthorization();
+    app.MapControllers();
 
     app.Run();
 }

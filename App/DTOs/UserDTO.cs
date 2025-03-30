@@ -6,15 +6,15 @@ namespace MoodTunesApp.App.DTOs
     {
         [Required]
         [MaxLength(20)]
-        public string UserName;
+        public string UserName {get; set;}
         [Required]
         [EmailAddress]
-        public string Email;
+        public string Email {get; set;}
         [Required]
         [MinLength(8)]
-        public string Password;
+        public string Password {get; set;}
         [Required]
         [MinLength(8)]
-        public string _RePassword;
+        public string RePassword {get; set;}
     }
 }

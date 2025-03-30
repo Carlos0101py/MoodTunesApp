@@ -1,3 +1,4 @@
+using System.Text.Json.Serialization;
 
 namespace MoodTunesApp.App.Models
 {
@@ -5,6 +6,7 @@ namespace MoodTunesApp.App.Models
     {
         public ICollection<MoodType> MoodTypes {get;}
         
+        [JsonIgnore]
         public User User {get; set;}
         
         

@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 using BCrypt.Net;
 
 namespace MoodTunesApp.App.Models
@@ -14,6 +15,7 @@ namespace MoodTunesApp.App.Models
         private string _Password;
         
         [Required]
+        [JsonIgnore]
         public string Password
         {
             get => _Password;

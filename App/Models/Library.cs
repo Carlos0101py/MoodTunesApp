@@ -1,5 +1,6 @@
 
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace MoodTunesApp.App.Models
 {
@@ -10,8 +11,8 @@ namespace MoodTunesApp.App.Models
 
         public ICollection<Playlist> Playlists {get; set;}
 
+        [JsonIgnore]
         public User User {get; set;}
-        public Playlist Playlist {get; set;}
 
 
         public Library() : base(Guid.NewGuid(), DateTime.Now, DateTime.Now)

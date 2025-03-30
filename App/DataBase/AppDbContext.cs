@@ -9,6 +9,15 @@ namespace MoodTunesApp.App.DataBase
         {
         }
 
+        public DbSet<Library> Library {get; set;}
+        public DbSet<MoodMater> MoodMater {get; set;}
+        public DbSet<MoodType> MoodType {get; set;}
+        public DbSet<Music> Music {get; set;}
+        public DbSet<Playlist> Playlist {get; set;}
+        public DbSet<PlaylistMusic> PlaylistMusic {get; set;}
+        public DbSet<Session> Session {get; set;}
+        public DbSet<User> User {get; set;}
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
 
@@ -23,11 +32,17 @@ namespace MoodTunesApp.App.DataBase
             modelBuilder.Entity<Playlist>()
             .HasKey(s => s.Id);
             modelBuilder.Entity<PlaylistMusic>()
-            .HasKey(s => s.Id);
+            .HasKey(pm => new { pm.MusicId, pm.PlaylistId });
             modelBuilder.Entity<Session>()
             .HasKey(s => s.Id);
             modelBuilder.Entity<User>()
             .HasKey(s => s.Id);
+
+
+            //table user configuração de index
+            modelBuilder.Entity<User>().HasIndex(u => u.UserName).IsUnique();
+            modelBuilder.Entity<User>().HasIndex(u => u.Email).IsUnique();
+            modelBuilder.Entity<User>().Property(u => u.ImageProfileURL).IsRequired(false);
 
             /*
                 Relacionamento um pra um
@@ -94,17 +109,15 @@ namespace MoodTunesApp.App.DataBase
                 - A definição da tabela intermediária será feita com .UsingEntity<PlaylistMusic>()
             */
 
-            modelBuilder.Entity<Playlist>()
-            .HasMany(p => p.Musics)
-            .WithMany(m => m.Playlists)
-            .UsingEntity<PlaylistMusic>(
-                j => j.HasOne(pm => pm.Music)
-                    .WithMany(m => m.PlaylistMusics)
-                    .HasForeignKey(pm => pm.MusicId),  // Define a chave estrangeira para Music
-                j => j.HasOne(pm => pm.Playlist)
-                    .WithMany(p => p.PlaylistMusics)
-                    .HasForeignKey(pm => pm.PlaylistId) // Define a chave estrangeira para Playlist
-            );
+            modelBuilder.Entity<PlaylistMusic>()
+                .HasOne(pm => pm.Music)
+                .WithMany(m => m.PlaylistMusics)
+                .HasForeignKey(pm => pm.MusicId); // Define a chave estrangeira para Music
+
+            modelBuilder.Entity<PlaylistMusic>()
+                .HasOne(pm => pm.Playlist)
+                .WithMany(p => p.PlaylistMusics)
+                .HasForeignKey(pm => pm.PlaylistId);
         }
     }
 }

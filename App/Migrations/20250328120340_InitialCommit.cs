@@ -76,7 +76,6 @@ namespace App.Migrations
                     Name = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     LibraryId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
-                    LibraryId1 = table.Column<Guid>(type: "char(36)", nullable: true, collation: "ascii_general_ci"),
                     CreatedAt = table.Column<DateTime>(type: "datetime(6)", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "datetime(6)", nullable: false)
                 },
@@ -89,11 +88,6 @@ namespace App.Migrations
                         principalTable: "Library",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Playlist_Library_LibraryId1",
-                        column: x => x.LibraryId1,
-                        principalTable: "Library",
-                        principalColumn: "Id");
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
@@ -102,11 +96,11 @@ namespace App.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
-                    UserName = table.Column<string>(type: "longtext", nullable: false)
+                    UserName = table.Column<string>(type: "varchar(255)", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    Email = table.Column<string>(type: "longtext", nullable: false)
+                    Email = table.Column<string>(type: "varchar(255)", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    ImageProfileURL = table.Column<string>(type: "longtext", nullable: false)
+                    ImageProfileURL = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     Password = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
@@ -164,10 +158,34 @@ namespace App.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
+                name: "MusicPlaylist",
+                columns: table => new
+                {
+                    MusicsId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    PlaylistsId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci")
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_MusicPlaylist", x => new { x.MusicsId, x.PlaylistsId });
+                    table.ForeignKey(
+                        name: "FK_MusicPlaylist_Music_MusicsId",
+                        column: x => x.MusicsId,
+                        principalTable: "Music",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_MusicPlaylist_Playlist_PlaylistsId",
+                        column: x => x.PlaylistsId,
+                        principalTable: "Playlist",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
                 name: "PlaylistMusic",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
                     PlaylistId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
                     MusicId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
                     CreatedAt = table.Column<DateTime>(type: "datetime(6)", nullable: false),
@@ -175,7 +193,7 @@ namespace App.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_PlaylistMusic", x => x.Id);
+                    table.PrimaryKey("PK_PlaylistMusic", x => new { x.MusicId, x.PlaylistId });
                     table.ForeignKey(
                         name: "FK_PlaylistMusic_Music_MusicId",
                         column: x => x.MusicId,
@@ -224,20 +242,14 @@ namespace App.Migrations
                 column: "MusicId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_MusicPlaylist_PlaylistsId",
+                table: "MusicPlaylist",
+                column: "PlaylistsId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Playlist_LibraryId",
                 table: "Playlist",
                 column: "LibraryId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Playlist_LibraryId1",
-                table: "Playlist",
-                column: "LibraryId1",
-                unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "IX_PlaylistMusic_MusicId",
-                table: "PlaylistMusic",
-                column: "MusicId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_PlaylistMusic_PlaylistId",
@@ -251,6 +263,12 @@ namespace App.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
+                name: "IX_User_Email",
+                table: "User",
+                column: "Email",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_User_LibraryId",
                 table: "User",
                 column: "LibraryId",
@@ -261,6 +279,12 @@ namespace App.Migrations
                 table: "User",
                 column: "MoodMaterId",
                 unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_User_UserName",
+                table: "User",
+                column: "UserName",
+                unique: true);
         }
 
         /// <inheritdoc />
@@ -268,6 +292,9 @@ namespace App.Migrations
         {
             migrationBuilder.DropTable(
                 name: "MoodType");
+
+            migrationBuilder.DropTable(
+                name: "MusicPlaylist");
 
             migrationBuilder.DropTable(
                 name: "PlaylistMusic");

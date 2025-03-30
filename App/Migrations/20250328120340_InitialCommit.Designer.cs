@@ -11,7 +11,7 @@ using MoodTunesApp.App.DataBase;
 namespace App.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250325153553_InitialCommit")]
+    [Migration("20250328120340_InitialCommit")]
     partial class InitialCommit
     {
         /// <inheritdoc />
@@ -140,9 +140,6 @@ namespace App.Migrations
                     b.Property<Guid>("LibraryId")
                         .HasColumnType("char(36)");
 
-                    b.Property<Guid?>("LibraryId1")
-                        .HasColumnType("char(36)");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("longtext");
@@ -154,33 +151,24 @@ namespace App.Migrations
 
                     b.HasIndex("LibraryId");
 
-                    b.HasIndex("LibraryId1")
-                        .IsUnique();
-
                     b.ToTable("Playlist");
                 });
 
             modelBuilder.Entity("MoodTunesApp.App.Models.PlaylistMusic", b =>
                 {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("char(36)");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime(6)");
-
                     b.Property<Guid>("MusicId")
                         .HasColumnType("char(36)");
 
                     b.Property<Guid>("PlaylistId")
                         .HasColumnType("char(36)");
 
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime(6)");
+
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("datetime(6)");
 
-                    b.HasKey("Id");
-
-                    b.HasIndex("MusicId");
+                    b.HasKey("MusicId", "PlaylistId");
 
                     b.HasIndex("PlaylistId");
 
@@ -224,10 +212,9 @@ namespace App.Migrations
 
                     b.Property<string>("Email")
                         .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasColumnType("varchar(255)");
 
                     b.Property<string>("ImageProfileURL")
-                        .IsRequired()
                         .HasColumnType("longtext");
 
                     b.Property<Guid>("LibraryId")
@@ -245,9 +232,12 @@ namespace App.Migrations
 
                     b.Property<string>("UserName")
                         .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasColumnType("varchar(255)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("Email")
+                        .IsUnique();
 
                     b.HasIndex("LibraryId")
                         .IsUnique();
@@ -255,7 +245,25 @@ namespace App.Migrations
                     b.HasIndex("MoodMaterId")
                         .IsUnique();
 
+                    b.HasIndex("UserName")
+                        .IsUnique();
+
                     b.ToTable("User");
+                });
+
+            modelBuilder.Entity("MusicPlaylist", b =>
+                {
+                    b.Property<Guid>("MusicsId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<Guid>("PlaylistsId")
+                        .HasColumnType("char(36)");
+
+                    b.HasKey("MusicsId", "PlaylistsId");
+
+                    b.HasIndex("PlaylistsId");
+
+                    b.ToTable("MusicPlaylist");
                 });
 
             modelBuilder.Entity("MoodTunesApp.App.Models.MoodType", b =>
@@ -284,10 +292,6 @@ namespace App.Migrations
                         .HasForeignKey("LibraryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.HasOne("MoodTunesApp.App.Models.Library", null)
-                        .WithOne("Playlist")
-                        .HasForeignKey("MoodTunesApp.App.Models.Playlist", "LibraryId1");
 
                     b.Navigation("Library");
                 });
@@ -341,11 +345,23 @@ namespace App.Migrations
                     b.Navigation("MoodMater");
                 });
 
-            modelBuilder.Entity("MoodTunesApp.App.Models.Library", b =>
+            modelBuilder.Entity("MusicPlaylist", b =>
                 {
-                    b.Navigation("Playlist")
+                    b.HasOne("MoodTunesApp.App.Models.Music", null)
+                        .WithMany()
+                        .HasForeignKey("MusicsId")
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("MoodTunesApp.App.Models.Playlist", null)
+                        .WithMany()
+                        .HasForeignKey("PlaylistsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("MoodTunesApp.App.Models.Library", b =>
+                {
                     b.Navigation("Playlists");
 
                     b.Navigation("User")
